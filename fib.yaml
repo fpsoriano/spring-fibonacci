@@ -1,0 +1,35 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: fibonacci
+spec:
+  selector:
+    app: fibonacci
+    tier: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fibonacci
+spec:
+  selector:
+    matchLabels:
+      app: fibonacci
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fibonacci
+        tier: backend
+    spec:
+      containers:
+        - name: fibonacci
+          image: fibonacci:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
